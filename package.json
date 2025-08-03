@@ -1,0 +1,51 @@
+{
+  "name": "anime-canvas-app",
+  "version": "1.0.0",
+  "description": "二次元风格的画板应用，支持多种绘画工具和本地保存功能",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'No build process needed for this project'",
+    "test": "echo 'No tests specified'",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "railway:deploy": "railway up",
+    "railway:logs": "railway logs"
+  },
+  "keywords": [
+    "canvas",
+    "drawing",
+    "paint",
+    "anime",
+    "art",
+    "creative",
+    "web-app",
+    "html5",
+    "javascript"
+  ],
+  "author": "Anime Canvas Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/anime-canvas-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/anime-canvas-app/issues"
+  },
+  "homepage": "https://github.com/your-username/anime-canvas-app#readme"
+}

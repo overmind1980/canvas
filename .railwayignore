@@ -1,0 +1,61 @@
+# Railway部署忽略文件
+
+# 开发依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 日志文件
+logs
+*.log
+
+# 运行时数据
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 覆盖率目录
+coverage/
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git文件
+.git/
+.gitignore
+
+# 文档文件（可选）
+README.md
+RAILWAY_DEPLOYMENT.md
+
+# Vercel配置（不需要）
+.vercel/
+vercel.json
+.vercelignore
+
+# 本地上传文件（部署时会重新创建）
+uploads/artworks/*
+uploads/thumbnails/*
+artworks.json
