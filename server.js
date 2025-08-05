@@ -8,9 +8,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs').promises;
 const cors = require('cors');
+const net = require('net');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = process.env.PORT || 3000;
 
 // 中间件配置
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname)));
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const ARTWORKS_DIR = path.join(UPLOAD_DIR, 'artworks');
 const THUMBNAILS_DIR = path.join(UPLOAD_DIR, 'thumbnails');
+const IMAGES_DIR = path.join(UPLOAD_DIR, 'images'); // 用户上传的图像文件
 
 // 确保目录存在
 async function ensureDirectories() {
@@ -29,6 +31,7 @@ async function ensureDirectories() {
         await fs.mkdir(UPLOAD_DIR, { recursive: true });
         await fs.mkdir(ARTWORKS_DIR, { recursive: true });
         await fs.mkdir(THUMBNAILS_DIR, { recursive: true });
+        await fs.mkdir(IMAGES_DIR, { recursive: true });
         console.log('📁 上传目录已创建');
     } catch (error) {
         console.error('创建目录失败:', error);
@@ -46,6 +49,17 @@ const storage = multer.diskStorage({
     }
 });
 
+// 配置multer用于图像文件上传
+const imageStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, IMAGES_DIR);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'image-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
 const upload = multer({ 
     storage: storage,
     limits: {
@@ -57,6 +71,22 @@ const upload = multer({
             cb(null, true);
         } else {
             cb(new Error('只允许上传图片文件'));
+        }
+    }
+});
+
+const imageUpload = multer({ 
+    storage: imageStorage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB限制
+    },
+    fileFilter: function (req, file, cb) {
+        // 只允许图片文件
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('只允许上传 JPG, PNG, GIF, WebP 格式的图像文件'));
         }
     }
 });
@@ -451,6 +481,27 @@ app.post('/api/upload', upload.single('artwork'), async (req, res) => {
     }
 });
 
+// 图像上传接口
+app.post('/api/upload-image', imageUpload.single('image'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: '没有上传图像文件' });
+        }
+
+        res.json({
+            success: true,
+            filename: req.file.filename,
+            originalname: req.file.originalname,
+            size: req.file.size,
+            mimetype: req.file.mimetype,
+            url: `/uploads/images/${req.file.filename}`
+        });
+    } catch (error) {
+        console.error('图像上传错误:', error);
+        res.status(500).json({ error: '图像上传失败' });
+    }
+});
+
 // 获取服务器统计信息
 app.get('/api/stats', async (req, res) => {
     try {
@@ -511,16 +562,50 @@ app.use((req, res) => {
     });
 });
 
+// 检查端口是否可用
+function checkPortAvailable(port) {
+    return new Promise((resolve) => {
+        const server = net.createServer();
+        server.listen(port, () => {
+            server.once('close', () => {
+                resolve(true);
+            });
+            server.close();
+        });
+        server.on('error', () => {
+            resolve(false);
+        });
+    });
+}
+
+// 查找可用端口
+async function findAvailablePort(startPort) {
+    let port = startPort;
+    while (port < startPort + 100) {
+        if (await checkPortAvailable(port)) {
+            return port;
+        }
+        port++;
+    }
+    throw new Error('无法找到可用端口');
+}
+
 // 启动服务器
 async function startServer() {
     try {
         await ensureDirectories();
+        
+        const PORT = await findAvailablePort(DEFAULT_PORT);
         
         app.listen(PORT, () => {
             console.log(`🎨 二次元画板服务器已启动`);
             console.log(`🌐 访问地址: http://localhost:${PORT}`);
             console.log(`📁 上传目录: ${UPLOAD_DIR}`);
             console.log(`💾 数据库文件: ${DB_FILE}`);
+            
+            if (PORT !== DEFAULT_PORT) {
+                console.log(`⚠️  默认端口 ${DEFAULT_PORT} 被占用，已自动切换到端口 ${PORT}`);
+            }
         });
     } catch (error) {
         console.error('启动服务器失败:', error);

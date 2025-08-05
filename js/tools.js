@@ -599,29 +599,32 @@ class ToolManager {
             line: new LineTool()
         };
         
-        this.currentTool = this.tools.brush;
-        this.currentTool.activate();
+        this.currentTool = 'brush'; // 改为字符串形式
+        this.currentToolName = 'brush';
     }
 
     /**
      * 切换工具
      */
     switchTool(toolName) {
-        if (this.tools[toolName]) {
-            // 停用当前工具
-            if (this.currentTool) {
-                this.currentTool.deactivate();
-            }
-            
-            // 激活新工具
-            this.currentTool = this.tools[toolName];
-            this.currentTool.activate();
-            
-            // 更新全局引用
-            window.currentTool = this.currentTool;
-            
-            Utils.showNotification(`已切换到 ${this.getToolDisplayName(toolName)} 工具`, 'info', 1500);
+        // 停用当前工具
+        if (this.tools[this.currentTool]) {
+            this.tools[this.currentTool].deactivate();
         }
+        
+        // 更新当前工具
+        this.currentTool = toolName;
+        this.currentToolName = toolName;
+        
+        // 激活新工具（如果是传统绘画工具）
+        if (this.tools[toolName]) {
+            this.tools[toolName].activate();
+            window.currentTool = this.tools[toolName];
+        } else {
+            window.currentTool = null;
+        }
+        
+        Utils.showNotification(`已切换到 ${this.getToolDisplayName(toolName)} 工具`, 'info', 1500);
     }
 
     /**
@@ -635,7 +638,8 @@ class ToolManager {
             rectangle: '⬜ 矩形',
             ellipse: '⭕ 椭圆',
             triangle: '🔺 三角形',
-            line: '📏 直线'
+            line: '📏 直线',
+            image: '🖼️ 图像'
         };
         return names[toolName] || toolName;
     }

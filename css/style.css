@@ -70,6 +70,15 @@ body {
     background: linear-gradient(135deg, #98FB98 0%, #90EE90 100%);
 }
 
+.action-btn.upload {
+    background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+    position: relative;
+}
+
+.action-btn.upload:hover {
+    background: linear-gradient(135deg, #4169E1 0%, #0000FF 100%);
+}
+
 .action-btn.danger {
     background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
 }
@@ -572,16 +581,30 @@ kbd {
         flex-wrap: wrap;
         gap: 5px;
         padding: 8px;
+        justify-content: space-between;
+    }
+    
+    .action-buttons {
+        flex-wrap: wrap;
+        gap: 4px;
+        justify-content: center;
+        flex: 1;
     }
     
     .action-btn {
-        min-width: 50px;
-        padding: 8px 12px;
-        font-size: 12px;
+        min-width: 45px;
+        padding: 6px 10px;
+        font-size: 11px;
+        flex-shrink: 0;
     }
     
     .action-btn .text {
         display: none;
+    }
+    
+    .nav-buttons {
+        flex-wrap: wrap;
+        gap: 4px;
     }
     
     .toolbar {
@@ -629,6 +652,41 @@ kbd {
     
     .setting-group {
         margin-bottom: 10px;
+    }
+    
+    /* 优化图像上传工具在移动端的显示 */
+    .image-upload-group {
+        margin-bottom: 15px;
+    }
+    
+    .upload-btn {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .upload-info {
+        font-size: 13px;
+        margin-top: 8px;
+    }
+    
+    .image-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .image-actions .action-btn {
+        flex: 1;
+        min-width: calc(50% - 3px);
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+    
+    .image-preview-container img {
+        max-width: 120px;
+        max-height: 80px;
     }
 }
 
@@ -746,6 +804,143 @@ kbd {
 .loading {
     animation: spin 1s linear infinite;
 }
+
+/* 图像上传相关样式 */
+.upload-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
+}
+
+.upload-btn:hover {
+    background: linear-gradient(135deg, #FF1493, #FF69B4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+}
+
+.upload-info {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.image-preview-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 10px;
+}
+
+.image-preview-container img {
+    max-width: 150px;
+    max-height: 100px;
+    border-radius: 8px;
+    border: 2px solid #FFB6C1;
+    object-fit: contain;
+}
+
+.remove-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FF1493;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+    background: #DC143C;
+    transform: scale(1.1);
+}
+
+.image-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+    color: #333;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(255, 105, 180, 0.4);
+}
+
+/* 图像工具相关样式 */
+.image-layer {
+    position: absolute;
+    cursor: move;
+    border: 2px dashed transparent;
+    transition: border-color 0.2s ease;
+}
+
+.image-layer:hover {
+    border-color: #FF69B4;
+}
+
+.image-layer.selected {
+    border-color: #FF1493;
+    box-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+}
+
+.image-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* 图像变换控制点 */
+.transform-handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #FF1493;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.transform-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+.transform-handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+.transform-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+.transform-handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
+.transform-handle.n { top: -6px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+.transform-handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+.transform-handle.w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
+.transform-handle.e { top: 50%; right: -6px; transform: translateY(-50%); cursor: e-resize; }
 
 /* 滚动条样式 */
 ::-webkit-scrollbar {

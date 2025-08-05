@@ -25,6 +25,9 @@ class UIManager {
         // 初始化设置面板
         this.initSettingsPanels();
         
+        // 初始化图像设置面板
+        this.initImageSettings();
+        
         // 初始化工具按钮状态
         this.initToolButtons();
         
@@ -74,6 +77,8 @@ class UIManager {
             this.showExportDialog();
         });
 
+
+
         // 导航按钮
         this.bindElement('galleryBtn', 'click', () => {
             this.switchPage('gallery');
@@ -122,22 +127,36 @@ class UIManager {
      * 绑定工具按钮事件
      */
     bindToolButtons() {
-        const toolButtons = document.querySelectorAll('.tool-btn');
-        toolButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const toolName = e.currentTarget.dataset.tool;
-                if (toolName && window.toolManager) {
-                    // 更新按钮状态
-                    this.updateToolButtonState(e.currentTarget);
-                    
-                    // 切换工具
-                    window.toolManager.switchTool(toolName);
-                    
-                    // 更新设置面板
-                    this.updateSettingsPanel(toolName);
-                }
-            });
-        });
+        // 绑定工具按钮事件
+        document.getElementById('brushTool').addEventListener('click', () => this.selectTool('brush'));
+        document.getElementById('eraserTool').addEventListener('click', () => this.selectTool('eraser'));
+        document.getElementById('lineTool').addEventListener('click', () => this.selectTool('line'));
+        document.getElementById('bucketTool').addEventListener('click', () => this.selectTool('bucket'));
+        document.getElementById('imageTool').addEventListener('click', () => this.selectTool('image'));
+        
+        // 绑定形状工具按钮事件
+        document.getElementById('rectangleTool').addEventListener('click', () => this.selectTool('rectangle'));
+        document.getElementById('ellipseTool').addEventListener('click', () => this.selectTool('ellipse'));
+        document.getElementById('triangleTool').addEventListener('click', () => this.selectTool('triangle'));
+    }
+
+    /**
+     * 选择工具的统一方法
+     */
+    selectTool(toolName) {
+        if (window.toolManager) {
+            // 更新按钮状态
+            const button = document.getElementById(toolName + 'Tool');
+            if (button) {
+                this.updateToolButtonState(button);
+            }
+            
+            // 切换工具
+            window.toolManager.switchTool(toolName);
+            
+            // 更新设置面板
+            this.updateSettingsPanel(toolName);
+        }
     }
 
     /**
@@ -175,7 +194,7 @@ class UIManager {
      */
     updateSettingsPanel(toolName) {
         // 隐藏所有设置面板
-        const panels = ['brushSettings', 'shapeSettings', 'bucketSettings'];
+        const panels = ['brushSettings', 'shapeSettings', 'bucketSettings', 'imageSettings'];
         panels.forEach(panelId => {
             const panel = document.getElementById(panelId);
             if (panel) {
@@ -190,6 +209,8 @@ class UIManager {
             targetPanel = 'shapeSettings';
         } else if (toolName === 'bucket') {
             targetPanel = 'bucketSettings';
+        } else if (toolName === 'image') {
+            targetPanel = 'imageSettings';
         }
 
         const panel = document.getElementById(targetPanel);
@@ -222,6 +243,130 @@ class UIManager {
         window.bucketSettings = {
             tolerance: 10
         };
+    }
+
+    /**
+      * 初始化图像设置面板
+      */
+    initImageSettings() {
+        // 绑定图像上传按钮
+        const imageUpload = document.getElementById('imageUpload');
+        if (imageUpload) {
+            imageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    this.loadImageFile(file);
+                }
+            });
+        }
+
+        // 绑定选择图像按钮
+        const selectImageBtn = document.getElementById('selectImageBtn');
+        if (selectImageBtn) {
+            selectImageBtn.addEventListener('click', () => {
+                imageUpload.click();
+            });
+        }
+
+        // 绑定图像变换控制
+        this.bindImageTransformControls();
+    }
+
+    /**
+      * 绑定图像变换控制
+      */
+    bindImageTransformControls() {
+        // 缩放控制
+        const scaleSlider = document.getElementById('imageScale');
+        if (scaleSlider) {
+            scaleSlider.addEventListener('input', (e) => {
+                if (window.imageTool) {
+                    window.imageTool.updateTransform({ scale: parseFloat(e.target.value) });
+                }
+            });
+        }
+
+        // 旋转控制
+        const rotationSlider = document.getElementById('imageRotation');
+        if (rotationSlider) {
+            rotationSlider.addEventListener('input', (e) => {
+                if (window.imageTool) {
+                    window.imageTool.updateTransform({ rotation: parseFloat(e.target.value) });
+                }
+            });
+        }
+
+        // 透明度控制
+        const opacitySlider = document.getElementById('imageOpacity');
+        if (opacitySlider) {
+            opacitySlider.addEventListener('input', (e) => {
+                if (window.imageTool) {
+                    window.imageTool.updateTransform({ opacity: parseFloat(e.target.value) });
+                }
+            });
+        }
+
+        // 水平翻转
+        const flipHBtn = document.getElementById('flipHorizontal');
+        if (flipHBtn) {
+            flipHBtn.addEventListener('click', () => {
+                if (window.imageTool) {
+                    window.imageTool.flipHorizontal();
+                }
+            });
+        }
+
+        // 垂直翻转
+        const flipVBtn = document.getElementById('flipVertical');
+        if (flipVBtn) {
+            flipVBtn.addEventListener('click', () => {
+                if (window.imageTool) {
+                    window.imageTool.flipVertical();
+                }
+            });
+        }
+
+        // 重置变换
+        const resetBtn = document.getElementById('resetTransform');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (window.imageTool) {
+                    window.imageTool.resetTransform();
+                    // 重置滑块值
+                    if (scaleSlider) scaleSlider.value = 1;
+                    if (rotationSlider) rotationSlider.value = 0;
+                    if (opacitySlider) opacitySlider.value = 1;
+                }
+            });
+        }
+
+        // 移除图像
+        const removeBtn = document.getElementById('removeImage');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                if (window.imageTool) {
+                    window.imageTool.removeSelectedImage();
+                }
+            });
+        }
+    }
+
+     /**
+      * 加载图像文件
+      */
+    loadImageFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                if (window.imageTool) {
+                    window.imageTool.addImage(img);
+                    Utils.showNotification('图像已加载 🖼️', 'success');
+                }
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
 
     /**
@@ -580,15 +725,8 @@ class UIManager {
         };
 
         const toolName = toolMap[number];
-        if (toolName && window.toolManager) {
-            window.toolManager.switchTool(toolName);
-            
-            // 更新UI
-            const button = document.querySelector(`[data-tool="${toolName}"]`);
-            if (button) {
-                this.updateToolButtonState(button);
-                this.updateSettingsPanel(toolName);
-            }
+        if (toolName) {
+            this.selectTool(toolName);
         }
     }
 

@@ -174,6 +174,10 @@ class AnimeCanvasApp {
         this.managers.tool = new ToolManager(this.managers.canvas);
         window.toolManager = this.managers.tool;
         
+        // 初始化图像工具
+        this.managers.imageTool = new ImageTool(this.managers.canvas);
+        window.imageTool = this.managers.imageTool;
+        
         // 设置默认工具
         this.managers.tool.switchTool(this.settings.defaultTool);
     }

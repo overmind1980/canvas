@@ -224,7 +224,7 @@ class CanvasManager {
      * 重绘画布
      */
     redraw() {
-        // 保存当前画布内容
+        // 保存当前画布内容（不包括图像层）
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         
         // 清空并重绘背景
@@ -239,6 +239,11 @@ class CanvasManager {
         
         // 恢复画布内容
         this.ctx.putImageData(imageData, 0, 0);
+        
+        // 绘制图像层
+        if (window.imageTool) {
+            window.imageTool.draw(this.ctx);
+        }
     }
 
     /**

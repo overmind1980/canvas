@@ -32,6 +32,7 @@
                     <span class="icon">💾</span>
                     <span class="text">保存</span>
                 </button>
+
                 <button id="exportBtn" class="action-btn" title="导出图片">
                     <span class="icon">📥</span>
                     <span class="text">导出</span>
@@ -67,6 +68,10 @@
                         <button id="bucketTool" class="tool-btn" data-tool="bucket" title="油漆桶">
                             <span class="icon">🪣</span>
                             <span class="text">油漆桶</span>
+                        </button>
+                        <button id="imageTool" class="tool-btn" data-tool="image" title="图像工具">
+                            <span class="icon">🖼️</span>
+                            <span class="text">图像</span>
                         </button>
                     </div>
                 </div>
@@ -190,6 +195,48 @@
                         <small>容差越大，填充范围越广</small>
                     </div>
                 </div>
+
+                <!-- 图像设置 -->
+                <div id="imageSettings" class="panel-section" style="display: none;">
+                    <h3>🖼️ 图像设置</h3>
+                    
+                    <!-- 图像上传 -->
+                    <div class="setting-group image-upload-group">
+                        <label class="upload-btn">
+                            📁 选择图像
+                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        </label>
+                        <div class="upload-info">
+                            支持 JPG, PNG, GIF, WebP 格式
+                        </div>
+                    </div>
+                    
+                    <!-- 图像预览 -->
+                    <div id="imagePreview" class="setting-group" style="display: none;">
+                        <label>预览:</label>
+                        <div class="image-preview-container">
+                            <img id="previewImage" alt="预览图像">
+                            <button id="removeImage" class="remove-btn">×</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 图像变换控制 -->
+                    <div id="imageControls" class="setting-group" style="display: none;">
+                        <label for="imageOpacity">透明度:</label>
+                        <input type="range" id="imageOpacity" min="10" max="100" value="100">
+                        <span id="imageOpacityValue">100%</span>
+                        
+                        <div class="image-actions">
+                            <button id="flipHorizontal" class="action-btn">↔️ 水平翻转</button>
+                            <button id="flipVertical" class="action-btn">↕️ 垂直翻转</button>
+                            <button id="resetTransform" class="action-btn">🔄 重置变换</button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-tip">
+                        💡 拖拽图像可调整位置，双击可编辑变换
+                    </div>
+                </div>
             </aside>
         </main>
     </div>
@@ -255,6 +302,7 @@
     <script src="js/utils.js"></script>
     <script src="js/canvas.js"></script>
     <script src="js/tools.js"></script>
+    <script src="js/image-tool.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
