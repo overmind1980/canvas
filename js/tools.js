@@ -1,6 +1,6 @@
 /**
- * 二次元画板应用 - 绘画工具文件
- * 实现各种绘画工具的功能类
+ * 洞穴画 - 绘画工具文件
+ * 实现炭笔绘画工具功能
  */
 
 // 基础工具类
@@ -45,12 +45,12 @@ class BrushTool extends BaseTool {
         this.lastX = x;
         this.lastY = y;
         
-        // 设置画笔属性
+        // 设置炭笔属性
         const settings = window.brushSettings || {};
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = settings.color || '#FF69B4';
-        ctx.lineWidth = settings.size || 5;
-        ctx.globalAlpha = (settings.opacity || 100) / 100;
+        ctx.strokeStyle = '#000000'; // 固定为黑色
+        ctx.lineWidth = settings.size || 8;
+        ctx.globalAlpha = (settings.opacity || 80) / 100;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         

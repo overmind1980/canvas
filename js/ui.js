@@ -1,5 +1,5 @@
 /**
- * 二次元画板应用 - UI管理文件
+ * 洞穴画 - UI管理文件
  * 处理用户界面交互和事件绑定
  */
 
@@ -53,28 +53,8 @@ class UIManager {
      */
     bindEvents() {
         // 顶部操作按钮
-        this.bindElement('undoBtn', 'click', () => {
-            if (window.canvasManager) {
-                window.canvasManager.undo();
-            }
-        });
-
-        this.bindElement('redoBtn', 'click', () => {
-            if (window.canvasManager) {
-                window.canvasManager.redo();
-            }
-        });
-
-        this.bindElement('clearBtn', 'click', () => {
-            this.showClearConfirmation();
-        });
-
-        this.bindElement('saveBtn', 'click', () => {
-            this.saveArtwork();
-        });
-
         this.bindElement('exportBtn', 'click', () => {
-            this.showExportDialog();
+            this.downloadArtwork();
         });
 
 
@@ -82,10 +62,6 @@ class UIManager {
         // 导航按钮
         this.bindElement('galleryBtn', 'click', () => {
             this.switchPage('gallery');
-        });
-
-        this.bindElement('helpBtn', 'click', () => {
-            this.switchPage('help');
         });
 
         // 返回按钮
@@ -127,17 +103,11 @@ class UIManager {
      * 绑定工具按钮事件
      */
     bindToolButtons() {
-        // 绑定工具按钮事件
-        document.getElementById('brushTool').addEventListener('click', () => this.selectTool('brush'));
-        document.getElementById('eraserTool').addEventListener('click', () => this.selectTool('eraser'));
-        document.getElementById('lineTool').addEventListener('click', () => this.selectTool('line'));
-        document.getElementById('bucketTool').addEventListener('click', () => this.selectTool('bucket'));
-        document.getElementById('imageTool').addEventListener('click', () => this.selectTool('image'));
-        
-        // 绑定形状工具按钮事件
-        document.getElementById('rectangleTool').addEventListener('click', () => this.selectTool('rectangle'));
-        document.getElementById('ellipseTool').addEventListener('click', () => this.selectTool('ellipse'));
-        document.getElementById('triangleTool').addEventListener('click', () => this.selectTool('triangle'));
+        // 绑定炭笔工具按钮事件
+        const brushTool = document.getElementById('brushTool');
+        if (brushTool) {
+            brushTool.addEventListener('click', () => this.selectTool('brush'));
+        }
     }
 
     /**
@@ -890,6 +860,17 @@ class UIManager {
             };
             img.src = imageData;
         });
+    }
+
+    /**
+     * 直接下载画作
+     */
+    downloadArtwork() {
+        if (window.canvasManager) {
+            const filename = `洞穴壁画_${new Date().getTime()}.png`;
+            window.canvasManager.exportAsImage(filename, 'png', 1.0);
+            Utils.showNotification('🔥 壁画已下载！', 'success', 2000);
+        }
     }
 
     /**

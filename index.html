@@ -3,308 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 二次元画板 - 可爱绘画工具</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
+    <title>洞穴画 - 原始绘画工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: radial-gradient(ellipse at center, #2F1B14 0%, #1A0F0A 70%, #000000 100%);
+            color: #D4A574;
+            overflow: hidden;
+            user-select: none;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polygon points="2,2 6,2 8,22 4,22" fill="%23000000" transform="rotate(-45 5 12)"/></svg>') 2 2, auto;
+        }
+        
+        .cave-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .rock-frame {
+            position: relative;
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 140, 0, 0.3) 0%, rgba(255, 69, 0, 0.2) 30%, rgba(139, 69, 19, 0.1) 60%, transparent 100%),
+                        radial-gradient(ellipse at 70% 80%, rgba(255, 140, 0, 0.2) 0%, rgba(255, 69, 0, 0.1) 40%, transparent 70%);
+            padding: 40px;
+            border-radius: 50% 30% 60% 40% / 40% 60% 30% 50%;
+            box-shadow: inset 0 0 100px rgba(255, 140, 0, 0.1),
+                        0 0 200px rgba(255, 69, 0, 0.2);
+        }
+        
+        .canvas-wrapper {
+            position: relative;
+            border-radius: 45% 35% 55% 45% / 35% 55% 35% 45%;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8),
+                        0 0 100px rgba(139, 69, 19, 0.3);
+            background: #8B0000;
+        }
+        
+        #canvas {
+            display: block;
+            background: #8B0000;
+            border-radius: 45% 35% 55% 45% / 35% 55% 35% 45%;
+        }
+        
+        #previewCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: 45% 35% 55% 45% / 35% 55% 35% 45%;
+        }
+        
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 3;
+            border-radius: 45% 35% 55% 45% / 35% 55% 35% 45%;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: #D4A574;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.6);
+        }
+        
+        .music-toggle {
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+        }
+        
+        .music-toggle.playing {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(255, 107, 53, 0.8); }
+            100% { box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4); }
+        }
+        
+        .gallery-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .gallery-content {
+            background: linear-gradient(135deg, #2F1B14 0%, #1A0F0A 100%);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            border: 3px solid #8B4513;
+        }
+        
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #D4A574;
+        }
+        
+        .artwork-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .artwork-item {
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #8B0000;
+        }
+        
+        .artwork-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <!-- 主画板页面 -->
-    <div id="app" class="app-container">
-        <!-- 顶部操作面板 -->
-        <header class="top-panel">
-            <div class="logo">
-                <h1>🎨 二次元画板</h1>
+    <div class="cave-container">
+        <div class="rock-frame">
+            <div class="canvas-wrapper">
+                <canvas id="canvas" width="800" height="600"></canvas>
+                <canvas id="previewCanvas" width="800" height="600"></canvas>
+                <canvas id="particleCanvas" width="800" height="600"></canvas>
             </div>
-            <div class="action-buttons">
-                <button id="undoBtn" class="action-btn" title="撤销 (Ctrl+Z)">
-                    <span class="icon">↶</span>
-                    <span class="text">撤销</span>
-                </button>
-                <button id="redoBtn" class="action-btn" title="重做 (Ctrl+Y)">
-                    <span class="icon">↷</span>
-                    <span class="text">重做</span>
-                </button>
-                <button id="clearBtn" class="action-btn danger" title="清空画布">
-                    <span class="icon">🗑️</span>
-                    <span class="text">清空</span>
-                </button>
-                <button id="saveBtn" class="action-btn save" title="保存到本地">
-                    <span class="icon">💾</span>
-                    <span class="text">保存</span>
-                </button>
-
-                <button id="exportBtn" class="action-btn" title="导出图片">
-                    <span class="icon">📥</span>
-                    <span class="text">导出</span>
-                </button>
-            </div>
-            <div class="nav-buttons">
-                <button id="galleryBtn" class="nav-btn">
-                    <span class="icon">🖼️</span>
-                    <span class="text">作品</span>
-                </button>
-                <button id="helpBtn" class="nav-btn">
-                    <span class="icon">❓</span>
-                    <span class="text">帮助</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- 主要内容区域 -->
-        <main class="main-content">
-            <!-- 左侧工具栏 -->
-            <aside class="toolbar">
-                <div class="tool-section">
-                    <h3>🖌️ 绘画工具</h3>
-                    <div class="tool-group">
-                        <button id="brushTool" class="tool-btn active" data-tool="brush" title="画笔">
-                            <span class="icon">🖌️</span>
-                            <span class="text">画笔</span>
-                        </button>
-                        <button id="eraserTool" class="tool-btn" data-tool="eraser" title="橡皮擦">
-                            <span class="icon">🧽</span>
-                            <span class="text">橡皮擦</span>
-                        </button>
-                        <button id="bucketTool" class="tool-btn" data-tool="bucket" title="油漆桶">
-                            <span class="icon">🪣</span>
-                            <span class="text">油漆桶</span>
-                        </button>
-                        <button id="imageTool" class="tool-btn" data-tool="image" title="图像工具">
-                            <span class="icon">🖼️</span>
-                            <span class="text">图像</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="tool-section">
-                    <h3>📐 基本形状</h3>
-                    <div class="tool-group">
-                        <button id="rectangleTool" class="tool-btn" data-tool="rectangle" title="矩形">
-                            <span class="icon">⬜</span>
-                            <span class="text">矩形</span>
-                        </button>
-                        <button id="ellipseTool" class="tool-btn" data-tool="ellipse" title="椭圆">
-                            <span class="icon">⭕</span>
-                            <span class="text">椭圆</span>
-                        </button>
-                        <button id="triangleTool" class="tool-btn" data-tool="triangle" title="三角形">
-                            <span class="icon">🔺</span>
-                            <span class="text">三角形</span>
-                        </button>
-                        <button id="lineTool" class="tool-btn" data-tool="line" title="直线">
-                            <span class="icon">📏</span>
-                            <span class="text">直线</span>
-                        </button>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- 中央画布区域 -->
-            <section class="canvas-container">
-                <div class="canvas-wrapper">
-                    <canvas id="canvas" width="800" height="600"></canvas>
-                    <canvas id="previewCanvas" width="800" height="600"></canvas>
-                    <div class="canvas-overlay">
-                        <div class="grid-toggle">
-                            <label>
-                                <input type="checkbox" id="gridToggle">
-                                <span>显示网格</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 右侧属性面板 -->
-            <aside class="properties-panel">
-                <!-- 颜色选择器 -->
-                <div class="panel-section">
-                    <h3>🎨 颜色选择</h3>
-                    <div class="color-picker-container">
-                        <input type="color" id="colorPicker" value="#FF69B4">
-                        <button id="addToCustomColors" class="custom-color-btn" title="添加到自定义调色盘">💾</button>
-                        
-                        <div class="color-section">
-                            <h4>预设颜色</h4>
-                            <div class="color-presets">
-                                <div class="preset-color" data-color="#FF69B4" style="background: #FF69B4" title="深粉色"></div>
-                                <div class="preset-color" data-color="#FFB6C1" style="background: #FFB6C1" title="樱花粉"></div>
-                                <div class="preset-color" data-color="#DDA0DD" style="background: #DDA0DD" title="淡紫色"></div>
-                                <div class="preset-color" data-color="#98FB98" style="background: #98FB98" title="薄荷绿"></div>
-                                <div class="preset-color" data-color="#87CEEB" style="background: #87CEEB" title="天空蓝"></div>
-                                <div class="preset-color" data-color="#F0E68C" style="background: #F0E68C" title="卡其色"></div>
-                                <div class="preset-color" data-color="#000000" style="background: #000000" title="黑色"></div>
-                                <div class="preset-color" data-color="#FFFFFF" style="background: #FFFFFF; border: 1px solid #ccc" title="白色"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="color-section">
-                            <h4>自定义调色盘</h4>
-                            <div id="customColors" class="custom-colors">
-                                <!-- 自定义颜色将在这里动态添加 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 画笔设置 -->
-                <div class="panel-section" id="brushSettings">
-                    <h3>🖌️ 画笔设置</h3>
-                    <div class="setting-group">
-                        <label>粗细: <span id="brushSizeValue">5</span>px</label>
-                        <input type="range" id="brushSize" min="1" max="50" value="5" class="slider">
-                    </div>
-                    <div class="setting-group">
-                        <label>透明度: <span id="opacityValue">100</span>%</label>
-                        <input type="range" id="opacity" min="1" max="100" value="100" class="slider">
-                    </div>
-                    <div class="setting-group">
-                        <label>硬度: <span id="hardnessValue">100</span></label>
-                        <input type="range" id="hardness" min="0" max="100" value="100" class="slider">
-                        <div class="hardness-preview" id="hardnessPreview"></div>
-                    </div>
-                </div>
-
-                <!-- 形状设置 -->
-                <div class="panel-section" id="shapeSettings" style="display: none;">
-                    <h3>📐 形状设置</h3>
-                    <div class="setting-group">
-                        <label>线条颜色:</label>
-                        <input type="color" id="strokeColor" value="#FF69B4">
-                    </div>
-                    <div class="setting-group">
-                        <label>填充颜色:</label>
-                        <input type="color" id="fillColor" value="#FFB6C1">
-                        <label>
-                            <input type="checkbox" id="enableFill">
-                            <span>启用填充</span>
-                        </label>
-                    </div>
-                    <div class="setting-group">
-                        <label>线条粗细: <span id="strokeWidthValue">2</span>px</label>
-                        <input type="range" id="strokeWidth" min="1" max="20" value="2" class="slider">
-                    </div>
-                </div>
-
-                <!-- 油漆桶设置 -->
-                <div class="panel-section" id="bucketSettings" style="display: none;">
-                    <h3>🪣 油漆桶设置</h3>
-                    <div class="setting-group">
-                        <label>容差: <span id="toleranceValue">10</span></label>
-                        <input type="range" id="tolerance" min="0" max="100" value="10" class="slider">
-                        <small>容差越大，填充范围越广</small>
-                    </div>
-                </div>
-
-                <!-- 图像设置 -->
-                <div id="imageSettings" class="panel-section" style="display: none;">
-                    <h3>🖼️ 图像设置</h3>
-                    
-                    <!-- 图像上传 -->
-                    <div class="setting-group image-upload-group">
-                        <label class="upload-btn">
-                            📁 选择图像
-                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                        </label>
-                        <div class="upload-info">
-                            支持 JPG, PNG, GIF, WebP 格式
-                        </div>
-                    </div>
-                    
-                    <!-- 图像预览 -->
-                    <div id="imagePreview" class="setting-group" style="display: none;">
-                        <label>预览:</label>
-                        <div class="image-preview-container">
-                            <img id="previewImage" alt="预览图像">
-                            <button id="removeImage" class="remove-btn">×</button>
-                        </div>
-                    </div>
-                    
-                    <!-- 图像变换控制 -->
-                    <div id="imageControls" class="setting-group" style="display: none;">
-                        <label for="imageOpacity">透明度:</label>
-                        <input type="range" id="imageOpacity" min="10" max="100" value="100">
-                        <span id="imageOpacityValue">100%</span>
-                        
-                        <div class="image-actions">
-                            <button id="flipHorizontal" class="action-btn">↔️ 水平翻转</button>
-                            <button id="flipVertical" class="action-btn">↕️ 垂直翻转</button>
-                            <button id="resetTransform" class="action-btn">🔄 重置变换</button>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-tip">
-                        💡 拖拽图像可调整位置，双击可编辑变换
-                    </div>
-                </div>
-            </aside>
-        </main>
+        </div>
     </div>
+    
+    <div class="controls">
+        <button id="musicToggle" class="control-btn music-toggle">🐂</button>
+        <button id="exportBtn" class="control-btn">📥</button>
+        <button id="galleryBtn" class="control-btn">🖼️</button>
+    </div>
+    
+    <!-- 本地音频文件 -->
+    <audio id="bullfightMusic" loop preload="auto">
+        <source src="audio/bull.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放。
+    </audio>
 
     <!-- 作品展示页面 -->
-    <div id="galleryPage" class="page" style="display: none;">
-        <header class="page-header">
-            <h2>🖼️ 我的作品</h2>
-            <button id="backToCanvas" class="back-btn">← 返回画板</button>
-        </header>
-        <div class="gallery-container">
+    <div id="galleryPage" class="gallery-container">
+        <div class="gallery-content">
+            <div class="gallery-header">
+                <h2>🖼️ 洞穴壁画集</h2>
+                <button id="backToCanvas" class="control-btn" style="margin-top: 10px;">← 返回</button>
+            </div>
             <div id="artworkGrid" class="artwork-grid">
                 <!-- 作品将通过JavaScript动态加载 -->
             </div>
         </div>
     </div>
 
-    <!-- 帮助页面 -->
-    <div id="helpPage" class="page" style="display: none;">
-        <header class="page-header">
-            <h2>❓ 使用帮助</h2>
-            <button id="backToCanvasFromHelp" class="back-btn">← 返回画板</button>
-        </header>
-        <div class="help-container">
-            <div class="help-section">
-                <h3>🎨 基本操作</h3>
-                <ul>
-                    <li>选择画笔工具，在画布上拖拽即可绘画</li>
-                    <li>使用颜色选择器或预设颜色改变画笔颜色</li>
-                    <li>调整画笔粗细、透明度和硬度来获得不同效果</li>
-                    <li>使用橡皮擦工具可以擦除画布内容</li>
-                </ul>
-            </div>
-            <div class="help-section">
-                <h3>🪣 油漆桶工具</h3>
-                <ul>
-                    <li>点击封闭区域可以填充颜色</li>
-                    <li>调整容差值控制填充范围</li>
-                    <li>容差越大，填充的颜色范围越广</li>
-                </ul>
-            </div>
-            <div class="help-section">
-                <h3>📐 形状工具</h3>
-                <ul>
-                    <li>选择形状工具后，在画布上拖拽绘制形状</li>
-                    <li>可以设置线条颜色、填充颜色和线条粗细</li>
-                    <li>勾选"启用填充"可以填充形状内部</li>
-                </ul>
-            </div>
-            <div class="help-section">
-                <h3>⌨️ 快捷键</h3>
-                <ul>
-                    <li><kbd>Ctrl + Z</kbd> - 撤销</li>
-                    <li><kbd>Ctrl + Y</kbd> - 重做</li>
-                    <li><kbd>Ctrl + S</kbd> - 保存</li>
-                    <li><kbd>Delete</kbd> - 清空画布</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <!-- JavaScript文件 -->
-    <script src="js/utils.js"></script>
-    <script src="js/canvas.js"></script>
-    <script src="js/tools.js"></script>
-    <script src="js/image-tool.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/cave-app.js"></script>
 </body>
 </html>

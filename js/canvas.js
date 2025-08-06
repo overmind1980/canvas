@@ -23,7 +23,7 @@ class CanvasManager {
         this.maxHistorySize = 50;
         this.isDrawing = false;
         this.showGrid = false;
-        this.backgroundColor = '#FFFFFF';
+        this.backgroundColor = '#8B0000';
         
         // 初始化画布
         this.init();
@@ -162,7 +162,7 @@ class CanvasManager {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // 设置背景色
-        this.ctx.fillStyle = this.backgroundColor || '#FFFFFF';
+        this.ctx.fillStyle = this.backgroundColor || '#8B0000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
         // 如果显示网格，绘制网格

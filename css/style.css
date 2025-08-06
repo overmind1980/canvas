@@ -1,4 +1,4 @@
-/* 二次元画板应用 - 主样式文件 */
+/* 洞穴画 - 原始风格样式文件 */
 
 /* 全局样式重置 */
 * {
@@ -8,9 +8,9 @@
 }
 
 body {
-    font-family: 'Arial', '微软雅黑', sans-serif;
-    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
-    color: #333;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #2F1B14 0%, #1A0F0A 100%);
+    color: #D4A574;
     overflow: hidden;
     user-select: none;
 }
@@ -20,25 +20,25 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
+    background: linear-gradient(135deg, #2F1B14 0%, #1A0F0A 100%);
 }
 
 /* 顶部操作面板 */
 .top-panel {
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(255, 105, 180, 0.3);
-    border-bottom: 2px solid #FF1493;
+    box-shadow: 0 2px 10px rgba(139, 69, 19, 0.5);
+    border-bottom: 2px solid #654321;
 }
 
 .logo h1 {
-    color: white;
+    color: #D4A574;
     font-size: 18px;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .action-buttons {
@@ -47,40 +47,42 @@ body {
 }
 
 .action-btn, .nav-btn {
-    background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
     border: none;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 8px 15px;
-    color: white;
+    color: #D4A574;
     font-size: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     gap: 5px;
+    font-weight: bold;
 }
 
 .action-btn:hover, .nav-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    box-shadow: 0 5px 15px rgba(139, 69, 19, 0.6);
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
 }
 
 .action-btn.save {
-    background: linear-gradient(135deg, #98FB98 0%, #90EE90 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
 }
 
 .action-btn.upload {
-    background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
     position: relative;
 }
 
 .action-btn.upload:hover {
-    background: linear-gradient(135deg, #4169E1 0%, #0000FF 100%);
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
 }
 
 .action-btn.danger {
-    background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
 }
 
 .nav-buttons {
@@ -98,11 +100,11 @@ body {
 /* 左侧工具栏 */
 .toolbar {
     width: 200px;
-    background: linear-gradient(135deg, #FFE4E1 0%, #FFF0F5 100%);
-    border-right: 2px solid #FFB6C1;
+    background: linear-gradient(135deg, #3E2723 0%, #2F1B14 100%);
+    border-right: 2px solid #8B4513;
     padding: 15px;
     overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(255, 182, 193, 0.2);
+    box-shadow: 2px 0 10px rgba(139, 69, 19, 0.4);
 }
 
 .tool-section {
@@ -110,7 +112,7 @@ body {
 }
 
 .tool-section h3 {
-    color: #FF69B4;
+    color: #D4A574;
     font-size: 14px;
     margin-bottom: 10px;
     text-align: center;
@@ -124,9 +126,9 @@ body {
 }
 
 .tool-btn {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFF0F5 100%);
-    border: 2px solid #FFB6C1;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #5D4037 0%, #4E342E 100%);
+    border: 2px solid #8B4513;
+    border-radius: 8px;
     padding: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -134,20 +136,21 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 12px;
-    color: #FF69B4;
+    color: #D4A574;
+    font-weight: bold;
 }
 
 .tool-btn:hover {
-    background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
-    color: white;
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+    color: #F5DEB3;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.5);
 }
 
 .tool-btn.active {
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+    background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+    color: #F5DEB3;
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.6);
 }
 
 .tool-btn .icon {
@@ -161,22 +164,36 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%);
+    background: linear-gradient(135deg, #2F1B14 0%, #1A0F0A 100%);
 }
 
 .canvas-wrapper {
     position: relative;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.2);
-    border: 3px solid #FFB6C1;
+    background: #8B0000;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+    border: 3px solid #654321;
     overflow: hidden;
 }
 
 #drawingCanvas {
     display: block;
-    cursor: crosshair;
-    background: white;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)"><polygon points="28,12 36,12 40,52 24,52" fill="%23000000" stroke="%23222222" stroke-width="1"/><ellipse cx="32" cy="10" rx="4" ry="3" fill="%23000000"/><circle cx="32" cy="8" r="1" fill="%23ff0000"/></g></svg>') 32 8, crosshair;
+    background: radial-gradient(circle at center, #8B0000 0%, #A0522D 30%, #8B4513 60%, #654321 100%);
+    background-size: 100% 100%;
+    position: relative;
+}
+
+#drawingCanvas::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 20%, transparent 40%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 #previewCanvas {
@@ -215,24 +232,24 @@ body {
 /* 右侧属性面板 */
 .properties-panel {
     width: 250px;
-    background: linear-gradient(135deg, #FFE4E1 0%, #FFF0F5 100%);
-    border-left: 2px solid #FFB6C1;
+    background: linear-gradient(135deg, #3E2723 0%, #2F1B14 100%);
+    border-left: 2px solid #8B4513;
     padding: 15px;
     overflow-y: auto;
-    box-shadow: -2px 0 10px rgba(255, 182, 193, 0.2);
+    box-shadow: -2px 0 10px rgba(139, 69, 19, 0.4);
 }
 
 .panel-section {
-    background: white;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #5D4037 0%, #4E342E 100%);
+    border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
-    border: 2px solid #FFB6C1;
-    box-shadow: 0 4px 8px rgba(255, 182, 193, 0.1);
+    border: 2px solid #8B4513;
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
 .panel-section h3 {
-    color: #FF69B4;
+    color: #D4A574;
     font-size: 14px;
     margin-bottom: 15px;
     text-align: center;
@@ -355,7 +372,7 @@ body {
 
 .setting-group label {
     display: block;
-    color: #FF69B4;
+    color: #D4A574;
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 5px;
@@ -365,7 +382,7 @@ body {
     width: 100%;
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(90deg, #FFE4E1 0%, #FFB6C1 100%);
+    background: linear-gradient(90deg, #3E2723 0%, #8B4513 100%);
     outline: none;
     -webkit-appearance: none;
 }
@@ -375,19 +392,19 @@ body {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .slider::-moz-range-thumb {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* 硬度预览 */

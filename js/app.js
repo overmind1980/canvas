@@ -1,9 +1,9 @@
 /**
- * 二次元画板应用 - 主应用文件
+ * 洞穴画 - 主应用文件
  * 初始化所有组件并启动画板应用
  */
 
-class AnimeCanvasApp {
+class CaveCanvasApp {
     constructor() {
         this.isInitialized = false;
         this.managers = {};
@@ -24,7 +24,7 @@ class AnimeCanvasApp {
         if (this.isInitialized) return;
         
         try {
-            console.log('🎨 初始化二次元画板应用...');
+            console.log('🔥 初始化洞穴画...');
             
             // 显示加载动画
             this.showLoadingScreen();
@@ -60,7 +60,7 @@ class AnimeCanvasApp {
             this.showWelcomeMessage();
             
             this.isInitialized = true;
-            console.log('✅ 二次元画板应用初始化完成！');
+            console.log('✅ 洞穴画初始化完成！');
             
         } catch (error) {
             console.error('❌ 应用初始化失败:', error);
@@ -79,7 +79,7 @@ class AnimeCanvasApp {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: linear-gradient(135deg, #FFB6C1, #FFC0CB, #FFE4E1);
+                background: linear-gradient(135deg, #2F1B14, #3E2723, #5D4037);
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -90,14 +90,14 @@ class AnimeCanvasApp {
                 <div style="
                     width: 80px;
                     height: 80px;
-                    border: 4px solid #FF69B4;
+                    border: 4px solid #8B4513;
                     border-top: 4px solid transparent;
                     border-radius: 50%;
                     animation: spin 1s linear infinite;
                     margin-bottom: 20px;
                 "></div>
-                <h2 style="color: #FF1493; margin: 0; font-size: 24px;">🎨 二次元画板</h2>
-                <p style="color: #FF69B4; margin: 10px 0 0 0; font-size: 16px;">正在加载中...</p>
+                <h2 style="color: #D4A574; margin: 0; font-size: 24px;">🔥 洞穴画</h2>
+                <p style="color: #A0522D; margin: 10px 0 0 0; font-size: 16px;">正在加载中...</p>
                 <style>
                     @keyframes spin {
                         0% { transform: rotate(0deg); }
@@ -445,23 +445,21 @@ class AnimeCanvasApp {
         
         setTimeout(() => {
             const modal = Utils.createModal(
-                '🎨 欢迎使用二次元画板！',
+                '🔥 欢迎使用洞穴画！',
                 `
                     <div style="text-align: left; line-height: 1.6;">
                         <p>✨ <strong>功能特色：</strong></p>
                         <ul style="margin: 10px 0; padding-left: 20px;">
-                            <li>🖌️ 多种绘画工具（画笔、橡皮擦、油漆桶等）</li>
-                            <li>🎨 丰富的颜色选择和画笔设置</li>
-                            <li>📐 基本形状绘制工具</li>
+                            <li>🖤 原始炭笔工具</li>
+                            <li>🔥 暗红色洞穴画布</li>
+                            <li>🎨 简约原始风格</li>
                             <li>💾 本地作品保存和管理</li>
                             <li>⌨️ 快捷键支持</li>
                         </ul>
                         <p>🎯 <strong>快捷键：</strong></p>
                         <ul style="margin: 10px 0; padding-left: 20px;">
-                            <li>Ctrl+Z: 撤销</li>
-                            <li>Ctrl+Y: 重做</li>
-                            <li>Ctrl+S: 保存作品</li>
-                            <li>1-4: 切换工具</li>
+                            <li>Ctrl+S: 下载画作</li>
+                            <li>G: 查看壁画集</li>
                         </ul>
                         <p style="margin-top: 15px;">现在开始你的创作之旅吧！ 🚀</p>
                     </div>
@@ -589,21 +587,21 @@ class AnimeCanvasApp {
 }
 
 // 创建并启动应用实例
-let animeCanvasApp;
+let caveCanvasApp;
 
 // 确保在DOM加载完成后启动应用
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        animeCanvasApp = new AnimeCanvasApp();
+        caveCanvasApp = new CaveCanvasApp();
     });
 } else {
-    animeCanvasApp = new AnimeCanvasApp();
+    caveCanvasApp = new CaveCanvasApp();
 }
 
 // 导出应用实例
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AnimeCanvasApp;
+    module.exports = CaveCanvasApp;
 } else {
-    window.AnimeCanvasApp = AnimeCanvasApp;
-    window.animeCanvasApp = animeCanvasApp;
+    window.CaveCanvasApp = CaveCanvasApp;
+    window.caveCanvasApp = caveCanvasApp;
 }
