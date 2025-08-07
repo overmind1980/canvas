@@ -2,6 +2,7 @@
 
 - 一个功能丰富的二次元风格画板应用，使用原生HTML、CSS和JavaScript开发，支持多种绘画工具和本地保存功能。
 - 可以在https://overmind1980.github.io/canvas/ 看效果。
+- 新的修改
 
 ## ✨ 功能特色
 
